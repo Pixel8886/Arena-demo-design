@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ARENA — спортивные соревнования</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,500;0,700;1,800;1,900&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#050505;--card:#121212;--line:#262626;--red:#E8281C;--red-d:#8E1510;--tx:#fff;--mut:#9A9A9A;--hd:"Exo 2","Arial Black",sans-serif;--bd:Inter,system-ui,sans-serif;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:90px;scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.5 var(--bd)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+.ph{background:linear-gradient(135deg,#1c1c1c,#0a0a0a 60%),#111;position:relative}
+.ph::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 38px,rgba(232,40,28,.10) 38px 52px)}
+.bgi{background-size:cover;background-position:center}
+.im>.ph,.im>.bgi{position:absolute;inset:0}
+.im>.bgi::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(5,5,5,.55))}
+/* top bar + nav */
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:13px;color:var(--mut)}
+.top nav{display:flex;gap:22px;align-items:center}
+.top a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--red);background:transparent;color:#fff;padding:9px 20px;border-radius:6px;font-weight:600;font-size:13px;letter-spacing:.04em;transition:.2s}
+.btn:hover{background:rgba(232,40,28,.15)}
+.btn.fill{background:linear-gradient(180deg,#F23A2D,#C81E13);box-shadow:0 8px 28px -8px rgba(232,40,28,.7)}
+.btn.fill:hover{box-shadow:0 10px 34px -4px rgba(232,40,28,.95);transform:translateY(-1px)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(18,18,18,.92);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;margin-top:4px}
+header .in{display:flex;align-items:center;gap:36px;padding:12px 22px}
+.logo{display:flex;align-items:center;justify-content:center;min-width:130px;height:46px;border:2px solid #fff;border-radius:50%;font:italic 900 22px var(--hd);letter-spacing:.02em}
+.logo img{max-height:42px}
+.menu{display:flex;gap:30px;font:600 12px var(--bd);letter-spacing:.1em;text-transform:uppercase;color:#cfcfcf}
+.menu a:hover,.menu a.on{color:var(--red)}
+.burger{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+/* hero */
+.hero{position:relative;margin-top:16px;height:520px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;pointer-events:none}
+.slide.on{opacity:1;pointer-events:auto}
+.slide .bg{position:absolute;inset:0;filter:grayscale(1) contrast(1.1) brightness(.7)}
+.slide::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,#050505 8%,rgba(5,5,5,.55) 50%,rgba(5,5,5,.1))}
+.stripe{position:absolute;z-index:1;right:-40px;top:-30px;bottom:-30px;width:300px;transform:skewX(-24deg);background:linear-gradient(90deg,rgba(232,40,28,.0),rgba(232,40,28,.55) 40%,rgba(232,40,28,.0) 41%,rgba(232,40,28,.0) 55%,rgba(232,40,28,.8) 56%,rgba(232,40,28,.8) 78%,rgba(232,40,28,0) 79%)}
+.slide .txt{position:absolute;z-index:2;left:56px;bottom:84px;max-width:640px}
+.tag{font:italic 800 15px var(--hd);color:var(--red);letter-spacing:.06em;text-transform:uppercase}
+.slide h1{font:italic 900 clamp(38px,6vw,72px)/.98 var(--hd);text-transform:uppercase;margin:10px 0 14px}
+.slide p{color:#d6d6d6;font-size:18px;margin:0 0 26px}
+.slide.on .txt{animation:in .9s cubic-bezier(.2,.7,.2,1)}
+@keyframes in{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+.dots{position:absolute;z-index:3;left:56px;bottom:34px;display:flex;gap:8px}
+.dots button{width:44px;height:4px;border:0;border-radius:2px;background:#555;padding:0;overflow:hidden;position:relative}
+.dots button.on::after{content:"";position:absolute;inset:0;background:var(--red);animation:bar 6s linear}
+@keyframes bar{from{transform:translateX(-100%)}to{transform:none}}
+/* sections */
+.sec-h{display:flex;justify-content:space-between;align-items:center;margin:0 0 18px}
+.sec-h h2{font:italic 800 28px var(--hd);text-transform:uppercase;margin:0;padding-left:14px;border-left:4px solid var(--red)}
+.link{font-size:13px;font-weight:600;color:#ddd}.link:hover{color:var(--red)}
+.cols{display:grid;grid-template-columns:2fr 1fr;gap:22px;margin-top:34px}
+.news{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.nc{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.25s;cursor:pointer}
+.nc:hover,.ev:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 14px 40px -14px rgba(232,40,28,.55)}
+.nc .im{height:150px;position:relative}
+.nc .b{display:flex;gap:12px;align-items:center;padding:14px}
+.date{background:var(--red-d);border-radius:8px;text-align:center;padding:5px 9px;min-width:46px;font:800 20px/1 var(--hd)}
+.date small{display:block;font:600 10px var(--bd);letter-spacing:.08em;color:#ffb3ad;text-transform:uppercase}
+.nc .b span{font-weight:600;font-size:14px;line-height:1.3}
+.up{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.ur{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
+.ur:hover b{color:var(--red)}
+.ur .date{background:#1d1d1d;border:1px solid var(--line)}.ur .date small{color:var(--mut)}
+.ur b{display:block;font-size:15px}.ur i{font-style:normal;font-size:12px;color:var(--mut)}
+.go{margin-left:auto;width:26px;height:26px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-size:13px;flex:none}
+/* catalog */
+.cat{margin-top:56px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 18px;font-size:14px;font-weight:500;transition:.2s}
+.chip:hover{border-color:var(--red)}
+.chip.on{background:var(--red);border-color:var(--red);box-shadow:0 6px 22px -6px rgba(232,40,28,.8)}
+.ctl{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.ctl input,.ctl select{background:var(--card);color:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 14px;font:inherit;font-size:14px}
+.ctl input{width:200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:.25s;display:flex;flex-direction:column;animation:in .5s both}
+.ev .im{height:170px;position:relative}
+.ev .im .date{position:absolute;z-index:2;left:12px;top:12px;box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.sp{position:absolute;z-index:2;right:12px;top:12px;background:rgba(0,0,0,.65);border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:12px}
+.ev .bd{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.ev h3{margin:0;font:700 19px/1.2 var(--hd)}
+.ev .m{color:var(--mut);font-size:13px}
+.ev .ft{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center}
+.pr{font:800 18px var(--hd)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:50px 0}
+/* stats */
+.stats{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:14px;background:var(--card);position:relative;overflow:hidden}
+.stats::before{content:"";position:absolute;left:-30px;top:-20px;bottom:-20px;width:150px;transform:skewX(-24deg);background:linear-gradient(90deg,rgba(232,40,28,.85),rgba(232,40,28,0))}
+.st{padding:28px 20px;text-align:center;position:relative;border-left:1px solid var(--line)}
+.st:first-child{border:0}
+.st b{display:block;font:italic 900 40px var(--hd)}.st span{color:var(--mut);font-size:14px}
+.cta{margin:56px 0;padding:44px;border-radius:14px;border:1px solid var(--red-d);background:linear-gradient(100deg,#1a0705,#0a0a0a);display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.cta h2{font:italic 900 clamp(26px,4vw,40px)/1.05 var(--hd);text-transform:uppercase;margin:0 0 8px}.cta p{margin:0;color:var(--mut)}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--mut);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+/* modal + toast */
+.mo{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);display:none;place-items:center;padding:20px;backdrop-filter:blur(4px)}
+.mo.on{display:grid}
+.md{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--red-d);border-radius:14px;animation:pop .3s}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.md .im{height:210px;position:relative}
+.md .c{padding:22px}.md h3{font:italic 800 28px/1.1 var(--hd);margin:0 0 6px;text-transform:uppercase}
+.md dl{display:grid;grid-template-columns:110px 1fr;gap:8px;margin:16px 0;font-size:15px}.md dt{color:var(--mut)}.md dd{margin:0}
+.x{position:absolute;z-index:3;right:12px;top:12px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:rgba(0,0,0,.7)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--red);padding:12px 22px;border-radius:8px;font-weight:600;z-index:120;transition:.35s}
+.toast.on{transform:translate(-50%,0)}
+@media(max-width:960px){.cols{grid-template-columns:1fr}.news{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.st:nth-child(3){border-left:0}.st{border-top:1px solid var(--line)}.menu{display:none}.menu.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:#121212;padding:20px;border:1px solid var(--line);border-radius:12px;margin-top:6px;gap:16px}.burger{display:block}.top nav a:not(.btn){display:none}}
+@media(max-width:600px){.hero{height:460px}.slide .txt{left:22px;right:22px;bottom:80px}.dots{left:22px}.news{grid-template-columns:1fr}.ctl{margin-left:0;width:100%}.ctl input{flex:1;width:auto}.cta{padding:26px}.top .soc{display:none}.logo{min-width:100px;font-size:18px}header .in{gap:14px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="soc">Discord · Telegram · YouTube · Twitch · VK</span>
+    <nav><a href="#">Организаторам</a><a href="#">О нас</a><a href="#">Поддержка</a><a class="btn" href="#">Войти</a><a class="btn fill" href="#">Регистрация</a></nav></div>
+  <header><div class="in">
+    <a class="logo" href="#"><span id="logoTxt">ARENA</span></a>
+    <nav class="menu" id="menu"><a href="#cat" class="on">События</a><a href="#cat">Атлеты</a><a href="#cat">Рейтинги</a><a href="#cat">Трансляции</a><a href="#cat">Регламент</a><a href="#cat">Клубы</a></nav>
+    <button class="burger" id="burger" aria-label="Меню">Меню</button>
+  </div></header>
+
+  <section class="hero" id="hero"></section>
+
+  <div class="cols">
+    <section><div class="sec-h"><h2>Новости</h2><a class="link" href="#">Все новости</a></div><div class="news" id="news"></div></section>
+    <aside class="up"><div class="sec-h"><h2>Скоро</h2><a class="link" href="#cat">Все</a></div><div id="soon"></div></aside>
+  </div>
+
+  <section class="cat" id="cat">
+    <div class="sec-h"><h2>Календарь соревнований</h2></div>
+    <div class="bar"><div class="chips" id="chips"></div>
+      <div class="ctl"><input id="q" type="search" placeholder="Поиск по названию"><select id="city"></select><select id="per"><option value="0">Любая дата</option><option value="30">Ближайшие 30 дней</option><option value="90">Ближайшие 3 месяца</option></select></div></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="stats" id="stats">
+    <div class="st"><b data-n="500" data-s="+">0</b><span>соревнований</span></div>
+    <div class="st"><b data-n="100" data-s="K+">0</b><span>атлетов</span></div>
+    <div class="st"><b data-n="50" data-s="+">0</b><span>городов</span></div>
+    <div class="st"><b data-n="10" data-s="M+">0</b><span>зрителей в год</span></div>
+  </section>
+
+  <section class="cta"><div><h2>Организуете турнир?</h2><p>Создайте событие, откройте регистрацию и соберите участников.</p></div><a class="btn fill" href="#" data-toast="Форма создания турнира появится в личном кабинете организатора">Создать турнир</a></section>
+  <footer><span>© 2026 ARENA</span><span>Политика конфиденциальности · Контакты</span></footer>
+</div>
+
+<div class="mo" id="mo"><div class="md" id="md" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ КАРТИНКИ: вставляйте ссылки (https://...) или пути (images/file.jpg) между кавычек ============ */
+const IMAGES = {
+  logo: "",                       // ← ЛОГОТИП в шапке (png/svg, прозрачный фон, высота ~80px). Пусто = текст ARENA
+  hero: [
+    "images/a4fd000b-0001-486c-9b36-f1b3b4ac06cb.jpg",                           // ← ФОН главного слайдера №1 (1920×900, спортсмен справа)
+    "",                           // ← ФОН главного слайдера №2 (1920×900)
+    ""                            // ← ФОН главного слайдера №3 (1920×900)
+  ],
+  news: [
+    "images/01b1abeab671a1eaf7a59dbea5188c31.png",                           // ← КАРТИНКА новости №1 (800×500)
+    "images/Снимок экрана 2026-11-21 165057.png",                           // ← КАРТИНКА новости №2 (800×500)
+    "images/orig.jpg"                            // ← КАРТИНКА новости №3 (800×500)
+  ]
+};
+
+/* ============ МЕРОПРИЯТИЯ: чтобы добавить событие, скопируйте любую строку ============
+   date: ГГГГ-ММ-ДД | img: обложка 800×500 (пусто = заглушка) | featured:true = показывать в слайдере */
+const EVENTS = [
+  {id:1, img:"images/football.jpg", /* ← ОБЛОЖКА: Зимний чемпионат */ sport:"Футбол", title:"Зимний чемпионат", date:"2026-12-12", time:"14:00", city:"Москва", place:"Арена Лужники", price:"Бесплатно", spots:"240 из 300", featured:true},
+  {id:2, img:"images/boxing.jpg", /* ← ОБЛОЖКА: Кубок страны по боксу */ sport:"Бокс", title:"Кубок страны по боксу", date:"2026-12-20", time:"16:00", city:"Санкт-Петербург", place:"Дворец спорта «Юбилейный»", price:"1 500 ₽", spots:"88 из 120", featured:true},
+  {id:3, img:"images/i.webp", /* ← ОБЛОЖКА: Ночной забег */ sport:"Бег", title:"Ночной забег 10 км", date:"2026-12-27", time:"20:00", city:"Казань", place:"Парк Тысячелетия", price:"900 ₽", spots:"1 200 из 2 000", featured:true},
+  {id:4, img:"images/basket.webp", /* ← ОБЛОЖКА: Про-лига баскетбол */ sport:"Баскетбол", title:"Про-лига 3×3", date:"2027-01-09", time:"18:00", city:"Москва", place:"Баскет-холл", price:"600 ₽", spots:"32 из 48", featured:false},
+  {id:5, img:"images/2dd85d6f6d46f2835d3608a0c64d62d4.jpg", /* ← ОБЛОЖКА: Открытый турнир по теннису */ sport:"Теннис", title:"Открытый турнир по теннису", date:"2027-01-17", time:"11:00", city:"Сочи", place:"Теннисный центр «Олимп»", price:"2 000 ₽", spots:"40 из 64", featured:false},
+  {id:6, img:"images/30c79b38eedeaa1d14636732027dfba0_S4BEN.jpg", /* ← ОБЛОЖКА: Турнир MMA */ sport:"MMA", title:"Турнир MMA «Стальной октагон»", date:"2027-02-06", time:"19:00", city:"Екатеринбург", place:"Дворец игровых видов спорта", price:"1 800 ₽", spots:"54 из 80", featured:false},
+  {id:7, img:"images/i (1).webp", /* ← ОБЛОЖКА: Волейбол */ sport:"Волейбол", title:"Кубок города по волейболу", date:"2027-02-21", time:"13:00", city:"Казань", place:"Баскет-холл Казань", price:"Бесплатно", spots:"18 из 24", featured:false},
+  {id:8, img:"images/utub1prchhkfolv7plldcjgkx4z7ms4z.jpg", /* ← ОБЛОЖКА: Лыжный марафон */ sport:"Лыжи", title:"Лыжный марафон 30 км", date:"2027-03-07", time:"10:00", city:"Санкт-Петербург", place:"Парк Сосновка", price:"1 100 ₽", spots:"410 из 600", featured:false}
+];
+const NEWS = [
+  {d:"2026-12-05", t:"Анонс зимнего чемпионата 2027"},
+  {d:"2026-12-03", t:"Новые рекорды на кубке страны"},
+  {d:"2026-12-01", t:"Стартует сезон Про-лиги"}
+];
+
+/* ---------- утилиты ---------- */
+const $=s=>document.querySelector(s), MON=["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
+const dt=s=>{const d=new Date(s+"T00:00:00");return {d:d.getDate(),m:MON[d.getMonth()],o:d}};
+const dateBox=s=>{const x=dt(s);return `<div class="date">${x.d}<small>${x.m}</small></div>`};
+const pic=(src,cls="")=>src?`<div class="bgi ${cls}" style="background-image:url('${src}')"></div>`:`<div class="ph ${cls}"></div>`;
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.k);toast.k=setTimeout(()=>t.classList.remove("on"),2800)};
+const NOW=new Date("2026-11-21T00:00:00");
+
+/* ---------- логотип ---------- */
+if(IMAGES.logo)$("#logoTxt").outerHTML=`<img src="${IMAGES.logo}" alt="ARENA">`;
+
+/* ---------- hero ---------- */
+const feat=EVENTS.filter(e=>e.featured);
+$("#hero").innerHTML=feat.map((e,i)=>`<div class="slide ${i?"":"on"}">
+  <div class="bg-w">${pic(IMAGES.hero[i]||e.img,"bg")}</div><div class="stripe"></div>
+  <div class="txt"><div class="tag">${e.sport} · ${dt(e.date).d} ${dt(e.date).m} · ${e.city}</div>
+  <h1>${e.title}</h1><p>Участвуйте, смотрите, становитесь лучшими.</p>
+  <button class="btn fill" data-open="${e.id}">Смотреть событие</button></div></div>`).join("")+
+  `<div class="dots">${feat.map((_,i)=>`<button aria-label="Слайд ${i+1}" class="${i?"":"on"}"></button>`).join("")}</div>`;
+let cur=0,timer;
+const go=i=>{const s=document.querySelectorAll(".slide"),d=document.querySelectorAll(".dots button");
+  s[cur].classList.remove("on");d[cur].classList.remove("on");cur=(i+s.length)%s.length;
+  s[cur].classList.add("on");void d[cur].offsetWidth;d[cur].classList.add("on");clearTimeout(timer);timer=setTimeout(()=>go(cur+1),6000)};
+document.querySelectorAll(".dots button").forEach((b,i)=>b.onclick=()=>go(i));
+timer=setTimeout(()=>go(1),6000);
+document.querySelectorAll(".bg-w .bg").forEach(el=>el.style.cssText+=";position:absolute;inset:0;filter:grayscale(1) contrast(1.1) brightness(.7)");
+
+/* ---------- новости и «Скоро» ---------- */
+$("#news").innerHTML=NEWS.map((n,i)=>`<article class="nc" data-toast="Страница новости появится в полной версии"><div class="im">${pic(IMAGES.news[i])}</div><div class="b">${dateBox(n.d)}<span>${n.t}</span></div></article>`).join("");
+$("#soon").innerHTML=EVENTS.slice(0,3).map(e=>`<button class="ur" data-open="${e.id}">${dateBox(e.date)}<div><b>${e.title}</b><i>${e.city} · ${e.time}</i></div><span class="go">›</span></button>`).join("");
+
+/* ---------- каталог и фильтры ---------- */
+const sports=["Все",...new Set(EVENTS.map(e=>e.sport))],cities=["Все города",...new Set(EVENTS.map(e=>e.city))];
+let fs="Все";
+$("#chips").innerHTML=sports.map((s,i)=>`<button class="chip ${i?"":"on"}">${s}</button>`).join("");
+$("#city").innerHTML=cities.map(c=>`<option>${c}</option>`).join("");
+function render(){
+  const q=$("#q").value.trim().toLowerCase(),c=$("#city").value,p=+$("#per").value;
+  const list=EVENTS.filter(e=>(fs==="Все"||e.sport===fs)&&(c==="Все города"||e.city===c)&&(!q||(e.title+e.city+e.sport).toLowerCase().includes(q))&&(!p||(dt(e.date).o-NOW)/864e5<=p));
+  $("#grid").innerHTML=list.length?list.map((e,i)=>`<article class="ev" style="animation-delay:${i*50}ms"><div class="im">${pic(e.img)}${dateBox(e.date)}<span class="sp">${e.sport}</span></div>
+  <div class="bd"><h3>${e.title}</h3><div class="m">${e.city} · ${e.place}</div><div class="m">${e.time} · мест занято: ${e.spots}</div>
+  <div class="ft"><span class="pr">${e.price}</span><button class="btn fill" data-open="${e.id}">Участвовать</button></div></div></article>`).join(""):`<div class="empty">Ничего не найдено. Сбросьте фильтры или измените запрос.</div>`;
+}
+$("#chips").onclick=e=>{if(!e.target.matches(".chip"))return;document.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));e.target.classList.add("on");fs=e.target.textContent;render()};
+["#q","#city","#per"].forEach(s=>$(s).addEventListener("input",render));
+render();
+
+/* ---------- окно события ---------- */
+function open(id){const e=EVENTS.find(x=>x.id==id),x=dt(e.date);
+  $("#md").innerHTML=`<div class="im">${pic(e.img)}<button class="x" aria-label="Закрыть">✕</button></div><div class="c"><div class="tag">${e.sport}</div><h3>${e.title}</h3>
+  <dl><dt>Дата</dt><dd>${x.d} ${x.m} ${x.o.getFullYear()}, ${e.time}</dd><dt>Город</dt><dd>${e.city}</dd><dt>Место</dt><dd>${e.place}</dd><dt>Участники</dt><dd>${e.spots}</dd><dt>Взнос</dt><dd>${e.price}</dd></dl>
+  <button class="btn fill" id="join">Подать заявку</button></div>`;
+  $("#mo").classList.add("on");$(".x").focus();
+  $("#join").onclick=()=>{$("#mo").classList.remove("on");toast("Заявка отправлена: «"+e.title+"»")}}
+document.addEventListener("click",e=>{
+  const o=e.target.closest("[data-open]");if(o)return open(o.dataset.open);
+  const t=e.target.closest("[data-toast]");if(t){e.preventDefault();toast(t.dataset.toast)}
+  if(e.target.id==="mo"||e.target.closest(".x"))$("#mo").classList.remove("on")});
+addEventListener("keydown",e=>{if(e.key==="Escape")$("#mo").classList.remove("on")});
+$("#burger").onclick=()=>$("#menu").classList.toggle("open");
+
+/* ---------- счётчики ---------- */
+new IntersectionObserver((en,ob)=>en.forEach(x=>{if(!x.isIntersecting)return;ob.unobserve(x.target);
+  x.target.querySelectorAll("b").forEach(b=>{const n=+b.dataset.n,t0=performance.now();
+    (function f(t){const k=Math.min((t-t0)/1400,1);b.textContent=Math.round(n*(1-Math.pow(1-k,3)))+b.dataset.s;if(k<1)requestAnimationFrame(f)})(t0)})}),{threshold:.4}).observe($("#stats"));
+</script>
+</body>
+</html>
